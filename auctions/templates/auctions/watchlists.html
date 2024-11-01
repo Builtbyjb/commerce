@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %} 
+
+{% block body %}
+<div class="page_main_div">
+  <!-- Displays number of watchlist listings -->
+  {% if number is not 0 %}
+  <h1>
+    Watchlists <strong class="alert alert-primary">{{number}}</strong>
+  </h1>
+  {% else %}
+  <h1>Watchlists</h1>
+{% endif %}
+  <br />
+
+  {% if number is not 0 %}
+  <!-- Makes sure there is at least one listing-->
+
+  {% for watchlist in watchlists %}
+  <div class="container-sm m-0 mb-5">
+    <a class="listing_link" href="{% url 'listing' watchlist.listing_id %}">
+      <div class="row">
+        <div class="col-sm-4">
+          <img src="{{watchlist.image}}" alt="" height="300" />
+        </div>
+        <div class="col-sm-4 pt-5">
+          <h3>{{watchlist.title}}</h3>
+          <h5>Price: ${{watchlist.bid}}</h5>
+          <p>{{watchlist.description}}</p>
+          <p>Created At: {{watchlist.time}}</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  {% endfor %} {% else %}
+  <h5 class="alert alert-primary">
+    You have no listing in your watchlist at the moment
+  </h5>
+  {% endif %} 
+</div>
+
+{% endblock %}

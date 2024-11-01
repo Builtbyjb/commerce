@@ -1,0 +1,170 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="page_main_div">
+    <div class="listing_header_div">
+        <!-- Close Listing -->
+        <div>
+            {% if listing_creator %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <button class="btn btn-primary" name="close_listing" type="submit" value="0">
+                        Close Listing
+                    </button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+        <!-- Watchlist -->
+        <div>
+            {% if user_authenticated %}
+            <form action="http://127.0.0.1:8000/watchlists" method="POST">
+                {% csrf_token %}
+
+                <!-- if user has already added an item to the watchlists-->
+                {% if unique_listing %}
+                <div class="mb-3">
+                    <button class="btn btn-primary" name="add to watchlist" type="submit" value={{listing.id}}>
+                        Add to watchlist
+                    </button>
+                </div>
+                {% else %}
+                <div class="mb-3">
+                    <button class="btn btn-danger" name="remove from watchlist" type="submit" value={{listing.id}}>
+                        Remove from watchlist
+                    </button>
+                </div>
+                {% endif %}
+            </form>
+
+            {% else %}
+            <a href="{% url 'login' %}">
+                <div class="mb-3">
+                    <button class="btn btn-primary">
+                        Log in to add to Watchlist
+                    </button>
+                </div>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <h1>Listing: {{ listing.title }}</h1>
+    {% if not is_active %}
+    <h4>Listing is Closed</h4>
+    {% endif %}
+
+    {% if auction_winner %}
+    <h3 class="alert alert-success">
+        Congratulation!! You are the winner of this Auction
+    </h3>
+
+    {% endif %}
+
+    <div class="listing_body_div">
+        <div>
+            <img class="mb-3" src={{listing.image}} alt="" width="300" />
+            <p> {{listing.description}} </p>
+        </div>
+        <!-- Bidding -->
+        <div class="listing_bid_div">
+            <h4>Price: ${{listing.bid}}</h4>
+            {% if not listing_creator %}
+
+            {% if is_active %}
+
+            {% if user_authenticated %}
+
+            <p>{{number_of_bids}} bid(s) so far. Your bid is the current bid</p>
+            {% if highest_bid is not 0 %}
+            <h6>Highest Bid: ${{highest_bid}}</h6>
+            {% endif %}
+
+            {% if bid_success == 1 %}
+            <p class="alert alert-success">Bid placed successfully</p>
+            {% elif bid_success == 0 %}
+            <p class="alert alert-danger">
+                Bid must be higher than the price and highest bid
+            </p>
+            {% elif bid_success == 2 %}
+            <p class="alert alert-danger">
+                Bid cannot contain letters or characters
+            </p>
+            {% endif %}
+
+            <!-- Submits bid -->
+            <form method="POST">
+                {% csrf_token %}
+                <div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="bid" placeholder="Bid">
+                        <input type="text" name="listing_id" hidden value={{listing.id}}>
+                        <input type="text" name="listing_bid" hidden value={{listing.bid}}>
+                    </div>
+                    <div class="mb-3">
+                        <input class="btn btn-primary" type="Submit" value="Place Bid">
+                    </div>
+                </div>
+            </form>
+
+            {% else %}
+            <a href="{% url 'login' %}">
+                <div class="mb-3">
+                    <button class="btn btn-primary">
+                        Log in to place a bid
+                    </button>
+                </div>
+            </a>
+            {% endif %}
+
+            {% endif %}
+
+            {% endif %}
+            <!-- Details -->
+            <h4>Details</h4>
+            <ul>
+                <li>Listed by: {{listing_owner.username}}</li>
+                <li>Category: {{listing.category}}</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Comments  -->
+    <h4>Comments</h4>
+    <!-- View Comments -->
+    {% for Comment in comments %}
+    <div>
+        <p><Strong>[{{Comment.time}}] {{Comment.user_name}}:</Strong> {{Comment.comment}}</p>
+    </div>
+    {% endfor %}
+
+    {% if is_active %}
+
+    {% if user_authenticated %}
+    <form method="POST">
+        {% csrf_token %}
+        <div style="width: 40%;">
+            <div class="mb-3">
+                <textarea class="form-control" name="comment" placeholder="Add a comment" row="5"
+                    maxlength="500"></textarea>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-primary" type="submit" value="Comment">
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <a href="{% url 'login' %}">
+        <div class="mb-3">
+            <button class="btn btn-primary">
+                Log in to comment
+            </button>
+        </div>
+    </a>
+    {% endif %}
+
+    {% endif %}
+
+</div>
+{% endblock %}

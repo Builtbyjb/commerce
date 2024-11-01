@@ -1,0 +1,38 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="page_main_div">
+    <h1> Categories</h1>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <!-- Electronics -->
+        <div class="mb-3">
+            <button class="btn btn-primary" 
+                type="submit" 
+                name="category" 
+                value="Electronics">
+                Electronics
+            </button>
+        </div>
+            <!-- Fashion -->
+        <div class="mb-3">
+            <button class="btn btn-primary" 
+                type="submit" 
+                name="category" 
+                value="Fashion">
+                Fashion
+            </button>
+        </div>
+            <!-- Toys -->
+        <div class="mb-3">
+            <button class="btn btn-primary" 
+                type="submit" 
+                name="category" 
+                value="Toys">
+                Toys
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

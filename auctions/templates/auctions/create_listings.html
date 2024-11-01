@@ -1,0 +1,69 @@
+{% extends "auctions/layout.html" %} {% block body %}
+<div class="page_main_div">
+  <h1>Create Listing</h1>
+  <br>
+  {% if message %}
+  <h5 class="alert alert-success">
+    {{ message }}
+  </h5>
+  {% endif %}
+  <br />
+  <form action="http://127.0.0.1:8000/create_listings" method="POST">
+    {% csrf_token %}
+    <div style="width: 50%">
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          placeholder="Title"
+        />
+      </div>
+      <div class="mb-3">
+        <textarea
+          class="form-control"
+          id="description"
+          name="description"
+          rows="10"
+          placeholder="Description"
+          maxlength="500"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          id="bid"
+          name="bid"
+          placeholder="Starting Bid"
+        />
+      </div>
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          id="image"
+          name="image"
+          placeholder="Image URL"
+        />
+      </div>
+      <div class="mb-3">
+        <select
+          class="form-select"
+          name="category"
+          aria-label="Default select example"
+        >
+          <option selected>Select Category</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Toys">Toys</option>
+          <option value="Electronics">Electronics</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <input class="btn btn-primary" type="submit" value="Add Listing" />
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
