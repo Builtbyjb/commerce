@@ -31,7 +31,7 @@ SECRET_KEY = secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = debug
 
-ALLOWED_HOSTS = ["https://easyauction.ajibolaawotide.com"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
